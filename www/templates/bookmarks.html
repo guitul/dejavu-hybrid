@@ -1,0 +1,13 @@
+<ion-view view-title="Bookmarks">
+  <ion-content>
+    <ion-list>
+      <ion-item>
+        <div class="list card" ng-repeat="bookmark in bookmarks" href="#/app/bookmarks/{{bookmark.id}}">
+            <div class="item item-divider">{{bookmark.name}}</div>
+            <div class="item item-text-wrap">body</div>
+            <div class="item item-divider">Tags</div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
