@@ -1,0 +1,32 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Bookmark</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeBookmark()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form ng-submit="saveBookmark()" novalidate>
+      <div class="list">
+        <label class="item item-input">
+          <input type="url" placeholder="Link" ng-model="bookmark.url">
+        </label>
+        <label class="item item-input">
+          <input type="text" placeholder="Name" ng-model="bookmark.name">
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">Category</div>
+          <select ng-model="bookmark.category" ng-options="category._id as category.name for category in allCategories"></select>
+        </label>
+        <div class="row">
+          <div class="col">
+            <button class="button button-block button-outline button-stable" ng-click="closeBookmark()">Cancel</button>
+          </div>
+          <div class="col">
+            <button class="button button-block button-positive" type="submit">Save</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>

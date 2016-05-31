@@ -13,7 +13,6 @@ angular.module('dejavu', ['ionic', 'dejavu.controllers', 'dejavu.services'])
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
-
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
@@ -28,26 +27,36 @@ angular.module('dejavu', ['ionic', 'dejavu.controllers', 'dejavu.services'])
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
-  })
-
-  .state('app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
+    controller: 'AppCtrl',
+    resolve: {
+      allCategories: ['categoryService', function(categoryService) {
+        return categoryService.query();
+      }],
+      userCategories: ['bookmarkService', function(bookmarkService) {
+        var categories = [];
+        var bookmarks = bookmarkService.query({}, function() {
+          var counts = {};
+          var id = '';
+          for (var i = 0, j = bookmarks.length; i < j; i++) {
+            id = bookmarks[i].category._id;
+            if (counts[id]) {
+              counts[id]++;
+            } else {
+              counts[id] = 1;
+              categories.push(bookmarks[i].category);
+            }
+          }
+          for (var i = 0, j = categories.length; i < j; i++) {
+            categories[i].count = counts[categories[i]._id];
+          }
+        });
+        return categories;
+      }],
+      filter: ['searchService', function(searchService) {
+        return searchService;
+      }]
     }
   })
-
-  .state('app.browse', {
-      url: '/browse',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/browse.html'
-        }
-      }
-    })
   .state('app.bookmarks', {
       url: '/bookmarks',
       views: {
@@ -55,22 +64,35 @@ angular.module('dejavu', ['ionic', 'dejavu.controllers', 'dejavu.services'])
           templateUrl: 'templates/bookmarks.html',
           controller: 'BookmarksCtrl',
           resolve: {
-              bookmarks:  ['bookmarkService', function(bookmarkService) {
+              bookmarks: ['bookmarkService', function(bookmarkService) {
                 return bookmarkService.query();
+              }],
+              filter: ['searchService', function(searchService) {
+                return searchService;
               }]
           }
         }
       }
   })
-
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
+  .state('app.category', {
+      url: '/category/:id',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/bookmarks.html',
+          controller: 'CategoryCtrl',
+          resolve: {
+              bookmarks: ['bookmarkService', function(bookmarkService) {
+                return bookmarkService.query({}).$promise;
+              }],
+              category: ['$stateParams', 'categoryService', function($stateParams, categoryService) {
+                return categoryService.get({id: $stateParams.id}).$promise;
+              }],
+              filter: ['searchService', function(searchService) {
+                return searchService;
+              }]
+          }
+        }
       }
-    }
   });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/bookmarks');

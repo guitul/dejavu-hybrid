@@ -1,6 +1,6 @@
 angular.module('dejavu.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, userCategories, allCategories, filter) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -11,22 +11,26 @@ angular.module('dejavu.controllers', [])
 
   // Form data for the login modal
   $scope.loginData = {};
+  $scope.bookmark = {};
+  $scope.userCategories = userCategories;
+  $scope.allCategories = allCategories;
+  $scope.search = filter;
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
     scope: $scope
   }).then(function(modal) {
-    $scope.modal = modal;
+    $scope.loginModal = modal;
   });
 
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
-    $scope.modal.hide();
+    $scope.loginModal.hide();
   };
 
   // Open the login modal
   $scope.login = function() {
-    $scope.modal.show();
+    $scope.loginModal.show();
   };
 
   // Perform the login action when the user submits the login form
@@ -39,22 +43,58 @@ angular.module('dejavu.controllers', [])
       $scope.closeLogin();
     }, 1000);
   };
+
+  // Create the bookmark modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/bookmark.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.bookmarkModal = modal;
+  });
+
+  // Triggered in the bookmark modal to close it
+  $scope.closeBookmark = function() {
+    $scope.bookmarkModal.hide();
+  };
+
+  // Open the bookmark modal
+  $scope.openBookmark = function() {
+    $scope.bookmarkModal.show();
+  };
+
+  // Save the bookmark when the user submits the bookmark form
+  $scope.saveBookmark = function() {
+    // do save
+    console.log('bookmark = ' + JSON.stringify($scope.bookmark));
+    $scope.closeBookmark();
+  };
+
+  $scope.getTotal = function() {
+    var total = 0;
+    for (var i = 0, j = $scope.userCategories.length; i < j; i++) {
+      total += parseInt($scope.userCategories[i].count);
+    }
+    return total;
+  }
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-})
-
-.controller('BookmarksCtrl', function($scope, bookmarks) {
+.controller('BookmarksCtrl', function($scope, bookmarks, filter) {
     $scope.bookmarks = bookmarks;
+    $scope.filter = filter;
+})
+.controller('CategoryCtrl', function($scope, bookmarks, category, filter) {
+    $scope.bookmarks = bookmarks;
+    $scope.category = category;
+    $scope.filter = filter;
+
+    $scope.updateBookmarks = function() {
+      var categoryBookmarks = [];
+      for (var i=0, j=$scope.bookmarks.length; i < j; i++) {
+        if ($scope.bookmarks[i].category._id === $scope.category._id) {
+          categoryBookmarks.push(bookmarks[i]);
+        }
+      }
+      $scope.bookmarks = categoryBookmarks;
+    };
+
+    $scope.updateBookmarks();
 });
