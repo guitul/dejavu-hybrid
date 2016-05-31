@@ -29,6 +29,9 @@ angular.module('dejavu', ['ionic', 'dejavu.controllers', 'dejavu.services'])
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl',
     resolve: {
+      bookmarkService: ['bookmarkService', function(bookmarkService) {
+        return bookmarkService;
+      }],
       allCategories: ['categoryService', function(categoryService) {
         return categoryService.query();
       }],
@@ -58,6 +61,7 @@ angular.module('dejavu', ['ionic', 'dejavu.controllers', 'dejavu.services'])
     }
   })
   .state('app.bookmarks', {
+      cache: false,
       url: '/bookmarks',
       views: {
         'menuContent': {
@@ -75,6 +79,7 @@ angular.module('dejavu', ['ionic', 'dejavu.controllers', 'dejavu.services'])
       }
   })
   .state('app.category', {
+      cache: false,
       url: '/category/:id',
       views: {
         'menuContent': {

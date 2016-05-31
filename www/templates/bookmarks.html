@@ -1,12 +1,13 @@
 <ion-view view-title="Bookmarks">
   <ion-content>
-    <ion-list >
+    <ion-list>
       <ion-item>
         <div class="bookmark-list">
-	        <div class="list card" ng-repeat="bookmark in bookmarks | filter:{name: filter.input}">
+	        <div class="list card" ng-repeat="bookmark in bookmarks | orderBy:'name' | filter:{name: filter.input}">
 	            <div class="item item-divider">
 	              <i class="icon fa" ng-class="bookmark.category.icon"></i>
 	              {{bookmark.name}}
+	              <a href="#" ng-click="editBookmark(bookmark)" class="pull-right dark"><i class="icon ion-edit"></i></a>
 	            </div>
 	            <div class="item item-text-wrap">body</div>
 	            <div class="item item-divider">

@@ -38,7 +38,6 @@ Déjà Vu consists of 3 different projects:
 Ensure your preferred web server points towards the `dist` directory.
 
 ### Development
-Déjà Vu is based on the [Responsive Dashboard](https://github.com/rdash) project by [Elliot Hesp](https://github.com/Ehesp).
 Please keep in mind that for the time being lots of features are not yet implemented:
 * User authentication
 * Link target parsing

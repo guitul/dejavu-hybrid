@@ -1,6 +1,6 @@
 angular.module('dejavu.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, userCategories, allCategories, filter) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, bookmarkService, userCategories, allCategories, filter) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -58,14 +58,25 @@ angular.module('dejavu.controllers', [])
 
   // Open the bookmark modal
   $scope.openBookmark = function() {
+    $scope.bookmark = {};
     $scope.bookmarkModal.show();
   };
 
+  $scope.editBookmark = function(bookmark) {
+    $scope.bookmark = angular.copy(bookmark);
+    $scope.bookmark.category = bookmark.category._id;
+    $scope.bookmarkModal.show();
+  }
+
   // Save the bookmark when the user submits the bookmark form
   $scope.saveBookmark = function() {
-    // do save
-    console.log('bookmark = ' + JSON.stringify($scope.bookmark));
+    if ($scope.bookmark._id) {
+      bookmarkService.update($scope.bookmark);
+    } else {
+      bookmarkService.save($scope.bookmark);
+    }
     $scope.closeBookmark();
+    $state.reload();
   };
 
   $scope.getTotal = function() {
@@ -81,6 +92,7 @@ angular.module('dejavu.controllers', [])
     $scope.bookmarks = bookmarks;
     $scope.filter = filter;
 })
+
 .controller('CategoryCtrl', function($scope, bookmarks, category, filter) {
     $scope.bookmarks = bookmarks;
     $scope.category = category;

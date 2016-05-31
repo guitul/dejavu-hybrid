@@ -1,12 +1,12 @@
 <ion-modal-view>
-  <ion-header-bar>
+  <ion-header-bar class="bar-royal">
     <h1 class="title">Bookmark</h1>
     <div class="buttons">
-      <button class="button button-clear" ng-click="closeBookmark()">Close</button>
+      <button class="button button-clear" ng-click="closeBookmark()"><i class="icon ion-android-close"></i></button>
     </div>
   </ion-header-bar>
   <ion-content>
-    <form ng-submit="saveBookmark()" novalidate>
+    <form novalidate>
       <div class="list">
         <label class="item item-input">
           <input type="url" placeholder="Link" ng-model="bookmark.url">
@@ -23,7 +23,7 @@
             <button class="button button-block button-outline button-stable" ng-click="closeBookmark()">Cancel</button>
           </div>
           <div class="col">
-            <button class="button button-block button-positive" type="submit">Save</button>
+            <button class="button button-block button-positive" type="submit" ng-click="saveBookmark()" >Save</button>
           </div>
         </div>
       </div>
