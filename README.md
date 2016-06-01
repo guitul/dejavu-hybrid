@@ -35,8 +35,6 @@ Déjà Vu consists of 3 different projects:
 4. Install the Cordova platforms & plugins: `ionic state reset`.
 5. Start a local development server for app dev and testing: `ionic serve --lab`. As soon as you save a file, the browser is refreshed automatically on [http://localhost:8100/ionic-lab](http://localhost:8100/ionic-lab).
 
-Ensure your preferred web server points towards the `dist` directory.
-
 ### Development
 Please keep in mind that for the time being lots of features are not yet implemented:
 * User authentication
